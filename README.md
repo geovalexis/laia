@@ -1,7 +1,7 @@
 
 ## Getting started
 
-1. Make sure you have python v3.12 installed on your machine. You can download it from [here](https://www.python.org/downloads/).
+1. Make sure you have python v3.11 installed on your machine. You can download it from [here](https://www.python.org/downloads/).
 
 2. Install dependencies:
    ```
