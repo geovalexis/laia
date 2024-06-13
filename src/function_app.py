@@ -4,6 +4,8 @@ from os import getenv
 
 #from openai import OpenAI
 
+import dotenv
+
 logger = logging.getLogger(__name__)
 
 
