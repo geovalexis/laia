@@ -2,6 +2,8 @@ import azure.functions as func
 import logging
 from os import getenv
 
+from openai import OpenAI
+
 logger = logging.getLogger(__name__)
 
 
@@ -13,42 +15,23 @@ app = func.FunctionApp()
 def test_function(req: func.HttpRequest) -> func.HttpResponse:
     logger.info(f"Python HTTP trigger function processed a request: {req}")
     logger.info("DATABRICKS_TOKEN: %s", getenv("DATABRICKS_TOKEN"))
-    # try:
-    #     client = OpenAI(
-    #         api_key=getenv("DATABRICKS_TOKEN"),
-    #         base_url="https://adb-2978037251816793.13.azuredatabricks.net/serving-endpoints",
-    #     )
-    #     chat_completion = client.chat.completions.create(
-    #         messages=[
-    #             {"role": "system", "content": "You are an AI assistant"},
-    #             {"role": "user", "content": "Tell me about Large Language Models"},
-    #         ],
-    #         model="databricks-meta-llama-3-70b-instruct",
-    #         max_tokens=256,
-    #     )
-    #     logger.info(chat_completion)
-    #     return func.HttpResponse(
-    #         chat_completion.choices[0].message.content, status_code=200
-    #     )
-    # except Exception as e:
-    #     logger.error(e)
-    #     return func.HttpResponse("Internal Server Error", status_code=500)
-
-    name = req.params.get("name")
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get("name")
-
-    if name:
-        return func.HttpResponse(
-            f"Hello, {name}. This HTTP triggered function executed successfully."
+    try:
+        client = OpenAI(
+            api_key=getenv("DATABRICKS_TOKEN"),
+            base_url="https://adb-2978037251816793.13.azuredatabricks.net/serving-endpoints",
         )
-    else:
-        return func.HttpResponse(
-            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-            status_code=200,
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": "You are an AI assistant"},
+                {"role": "user", "content": "Tell me about Large Language Models"},
+            ],
+            model="databricks-meta-llama-3-70b-instruct",
+            max_tokens=256,
         )
+        logger.info(chat_completion)
+        return func.HttpResponse(
+            chat_completion.choices[0].message.content, status_code=200
+        )
+    except Exception as e:
+        logger.error(e)
+        return func.HttpResponse("Internal Server Error", status_code=500)
