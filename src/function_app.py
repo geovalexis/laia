@@ -1,12 +1,9 @@
 import azure.functions as func
 import logging
-from openai import OpenAI
 from os import getenv
-from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
-load_dotenv()
 
 app = func.FunctionApp()
 
