@@ -2,7 +2,7 @@ import azure.functions as func
 import logging
 from os import getenv
 
-#from openai import OpenAI
+from openai import OpenAI
 
 import dotenv
 
