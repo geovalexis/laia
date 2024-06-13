@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 # load_dotenv()
 
-# app = func.FunctionApp()
+app = func.FunctionApp()
 # client = OpenAI(
 #   api_key=getenv('DATABRICKS_TOKEN'),
 #   base_url="https://adb-2978037251816793.13.azuredatabricks.net/serving-endpoints"
