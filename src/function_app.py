@@ -30,8 +30,7 @@ def test_function(req: func.HttpRequest) -> func.HttpResponse:
             max_tokens=256,
         )
         logger.info(chat_completion)
-        return_value = "Mocked response from llama3"
-        return func.HttpResponse(return_value, status_code=200)
+        return func.HttpResponse(chat_completion.choices[0].message.content, status_code=200)
     except Exception as e:
         logger.error(e)
         return func.HttpResponse("Internal Server Error", status_code=500)
