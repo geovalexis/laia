@@ -3,7 +3,7 @@ import logging
 import azure.functions as func
 from llama_index.core.llms import ChatMessage
 
-from laia.llamaindex import generate_response, hydrate_conversation
+from laia.rag import generate_response, hydrate_conversation
 
 logger = logging.getLogger(__name__)
 
