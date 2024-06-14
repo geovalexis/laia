@@ -12,8 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const player = videojs(videoElement);
     let mic_input_text = '';
     const azureKey = 'fvgyP2xTbhnH-Uq5J36NKbGB9FZGwfK1-tT4FuDn3n5PAzFugBHanw=='; 
-
-
+    document.getElementById('button-visit-1').innerText = '06/'+(getRandomInt(9)+15)+'/2024 \n'+(getRandomInt(9)+8)+':'+getRandomInt(6)+getRandomInt(10)
+    document.getElementById('button-visit-2').innerText = '06/'+(getRandomInt(9)+15)+'/2024 \n'+(getRandomInt(9)+8)+':'+getRandomInt(6)+getRandomInt(10)
+    document.getElementById('button-visit-3').innerText = '06/'+(getRandomInt(9)+15)+'/2024 \n'+(getRandomInt(9)+8)+':'+getRandomInt(6)+getRandomInt(10)
+    var final_message = {
+        "General Medical": "Based on your symptoms, I recommend booking an appointment in 24/7. Here are some available timeslots, you can click on the one that suits you best",
+        "Primary Care": "Based on your symptoms, I recommend booking an appointment in Primary Care. Here are some available timeslots, you can click on the one that suits you best",
+        "Mental Health": "Based on your symptoms, I recommend booking an appointment in Mental Health. Here are some available timeslots, you can click on the one that suits you best",
+        "Nutrition": "Based on your symptoms, I recommend booking an appointment in Nutrition. Here are some available timeslots, you can click on the one that suits you best",
+        "Dermatology": "Based on your symptoms, I recommend booking an appointment in Dermatology. Here are some available timeslots, you can click on the one that suits you best",
+        "Emergency": "This looks like an emergency, please call 911",
+        "CCM": "Based on your symptoms, I recommend booking an appointment in CCM. Here are some available timeslots, you can click on the one that suits you best"
+    };
+    
     document.getElementById('chat-form').addEventListener('submit', function(event) {
         event.preventDefault();
         var input = document.getElementById('chat-input');
@@ -32,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('start-button').addEventListener('click', () => {
         document.getElementById('popup').style.display = 'none';
         document.getElementById('container').style.display = '';
-        addMessageToChat('assistant',JSON.stringify({'text': "Hi, I'm Laia! I'm here to assist you into choosing the correct Teladoc program for your care. Could you share with me what symptoms do you have? ",'isFinal':'false'}))
+        addMessageToChat('assistant',JSON.stringify({'text': "Hi, I'm Laia! I'm here to assist you into choosing the correct Teladoc program for your care. Could you share with me what symptoms do you have? ",'isFinal':false}))
         playNewVideo('resources/init_video.mp4');
     })
 
@@ -44,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info_user').style.display = new_display;
     })
 
-    fetch('data/member/pii.csv')
+    fetch('data/pii.csv')
         .then(response => response.text())
         .then(text => {
             memberData= parseCSV(text);
@@ -202,15 +213,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 var url = URL.createObjectURL(data);
                 playNewVideo(url);
                 removeSpinner();
-                addMessageToChat('assistant', data_text); // Asegúrate de que `addMessageToChat` maneje la cadena JSON
+                if(JSON.parse(data_text)['isFinal']){
+                    data_text = finishMessage(data_text);
+                }
+                addMessageToChat('assistant', data_text); 
             })
             .catch(error => {
-                console.log(error)
                 removeSpinner();
+                if(JSON.parse(data_text)['isFinal'] ){
+                    data_text = finishMessage(data_text);
+                 }
                 addMessageToChat('assistant', data_text);
             });
     }
 
+    function finishMessage(data_text){
+        var finish_data = JSON.parse(data_text);
+        var type=finish_data.text;
+        finish_data['text'] = final_message[finish_data.text]
+        if(finish_data['text'] == ''){
+            for (var key in final_message) {
+                if (type.includes(key)) {
+                    finish_data['text'] = final_message[key];
+                    break
+                }
+            }
+        }
+        data_text = JSON.stringify(finish_data);
+        document.getElementById('chat-form').style.display = 'none';
+        if(type != 'Emergency'){
+            document.getElementById('schedule').style.display = 'flex';
+        }
+        return data_text;
+    }
 
     function playNewVideo(videoUrl) {
         player.pause();
@@ -231,4 +266,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
       }
+
+    
+    const buttonIds = ['button-visit-1', 'button-visit-2', 'button-visit-3'];
+    function schedulingClick(event) {
+        let textoBoton = event.target.innerText.split('\n');
+        let fecha = textoBoton[0];
+        let hora = textoBoton[1];
+
+        let message = `Your appointment has been confirmed, please meet your doctor on ${fecha} at ${hora}.`;
+
+        addMessageToChat("assistant",JSON.stringify({text:message}))
+        document.getElementById('schedule').style.display = 'none';
+    }
+
+    // Lista de IDs de los botones
+
+    // Asigna el texto inicial y el manejador de eventos a cada botón
+    buttonIds.forEach(id => {
+        document.getElementById(id).addEventListener('click', schedulingClick);
+    });
 });
