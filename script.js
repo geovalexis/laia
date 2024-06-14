@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'es-ES';
+        recognition.lang = 'en-EN';
 
         recognition.onstart = function() {
             recognizing = true;
@@ -192,8 +192,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generateAvatar(data_text) {
         const url = `https://laia-backend.azurewebsites.net/api/avatar?code=${azureKey}`;
+        var text = JSON.parse(data_text)['text'];
+        if(JSON.parse(data_text)['isFinal'] ){
+            var finish_data = JSON.parse(data_text);
+            var type=finish_data.text;
+            text = final_message[finish_data.text]
+            if(text == ''){
+                for (var key in final_message) {
+                    if (type.includes(key)) {
+                        text = final_message[key];
+                        break
+                    }
+                }
+            }
+        }
         const requestBody = {
-            message: JSON.parse(data_text)['text']
+            message: text
         };
         console.log(messages[messages.length - 1].content);
         fetch(url, {
