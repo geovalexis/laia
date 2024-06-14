@@ -12,7 +12,7 @@ app = func.FunctionApp()
 
 
 @app.function_name(name="generate")
-@app.route(route="generate", auth_level=func.AuthLevel.ANONYMOUS)
+@app.route(route="generate", auth_level=func.AuthLevel.ANONYMOUS, methods=["POST"])
 def test_function(req: func.HttpRequest) -> func.HttpResponse:
     logger.info(f"Python HTTP trigger function processed a request: {req}")
     req_body = req.get_json()
