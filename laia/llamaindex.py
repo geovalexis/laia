@@ -85,6 +85,19 @@ if __name__ == "__main__":
             role=MessageRole.USER,
             content="I am a little bit tired and dizzy and I haven't had any food since a few hours ago.",
         ),
+        ChatMessage(
+            role=MessageRole.ASSISTANT,
+            content="""
+            {
+                "text": "How long have you been experiencing the headache and blurred vision?",
+                "isFinal": false
+            }
+            """,
+        ),
+        ChatMessage(
+            role=MessageRole.USER,
+            content="Since this morning",
+        ),
     ]
     hydrate_conversation(messages, member_id=1)
     response = generate_response(messages=messages)
