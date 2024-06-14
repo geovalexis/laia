@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAIA</title>
+    <link rel="icon" href="resources/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link href="video-js.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="header">
+        <img src="resources/tdh-logo-full-color-rgb.svg" class="image_header" />
+        <button id="user-button" class="user-button">
+          <img id="user-img" src="resources/user.png"style="width: 25px; height: 25px;">
+        </button>
+        <div class="info_user" id="info_user" style="display: none;">
+          <p id="member_id"></p>
+          <p id="member_gender"></p>
+          <p id="member_age"></p>
+        </div>
+    </div>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <p>You are going to contact Laia, an AI Empowered channel, if this is a medical emergency please call to 9-1-1</p>
+            <button id="start-button" class="start-button">Accept</button>
+        </div>
+    </div>
+    <div class="container" id="container" style="display: none;">
+        <div class="left-grid">
+            <!-- Input para la respuesta del chat -->
+            <video id="background-video" class="video-js vjs-default-skin background-video" autoplay muted >
+              <source src="resources/wait_video_0.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="right-grid">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chat</h2>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Los mensajes del chat aparecerán aquí -->
+                </div>
+                <form id="chat-form" class="chat-form">
+                    <button id="mic-button" class="mic-button">
+                        <img id="mic-img" src="resources/on_voice.png"style="width: 18px; height: 25px;">
+                    </button>
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Write a message..." required>
+                    <button type="submit" class="chat-submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="video.min.js"></script>
+</body>
+</html>
