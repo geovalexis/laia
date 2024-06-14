@@ -3,7 +3,7 @@ import logging
 import azure.functions as func
 from llama_index.core.llms import ChatMessage
 
-from laia.llamaindex import generate_response
+from laia.llamaindex import generate_response, hydrate_conversation
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,7 @@ def test_function(req: func.HttpRequest) -> func.HttpResponse:
             ChatMessage(role=item["role"], content=item["content"])
             for item in req_body["messages"]
         ]
+        hydrate_conversation(messages, member_id=int(req_body["memberId"]))
         response = generate_response(messages)
         return func.HttpResponse(str(response), status_code=200)
     except Exception as e:

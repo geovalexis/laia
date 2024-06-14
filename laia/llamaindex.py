@@ -1,6 +1,7 @@
 import pathlib
 from os import getenv
 
+import pandas as pd
 from dotenv import load_dotenv
 from llama_index.core import (
     SimpleDirectoryReader,
@@ -17,7 +18,8 @@ load_dotenv()
 
 # Define static data paths
 INDEX_PERSIST_DIR = "./index"
-DOCS_DATA_DIR = "./data"
+DOCS_DATA_DIR = "./data/indexing"
+MEMBER_DATA_DIR = "./data/member"
 PROMPTS_DIR = "./prompts"
 
 # How to get your Databricks token: https://docs.databricks.com/en/dev-tools/auth/pat.html
@@ -37,7 +39,7 @@ if pathlib.Path(INDEX_PERSIST_DIR).exists():
     index = load_index_from_storage(storage_context, llm=llm)
 else:
     documents = SimpleDirectoryReader(DOCS_DATA_DIR).load_data()
-    index = TreeIndex.from_documents(documents, llm=llm)
+    index = TreeIndex.from_documents(documents, llm=llm, show_progress=True)
     # Save the index for later use
     index.storage_context.persist(INDEX_PERSIST_DIR)
 
@@ -45,8 +47,21 @@ else:
 with open(pathlib.Path(PROMPTS_DIR) / "system.txt") as f:
     system_prompt = f.read()
 
+# Read member data
+members_data = pd.read_csv(pathlib.Path(MEMBER_DATA_DIR) / f"pii.csv")
 
-# Create chat engine
+
+def hydrate_conversation(messages: list[ChatMessage], member_id: int) -> None:
+    member_context = members_data[members_data["patient_id"] == member_id]
+    messages.insert(
+        0,
+        ChatMessage(
+            role=MessageRole.USER,
+            content=f"Here is some context about myself: {member_context.to_dict(orient='records')}",
+        ),
+    )
+
+
 def generate_response(messages: list[ChatMessage]):
     chat_engine = index.as_chat_engine(
         llm=llm,
@@ -63,9 +78,14 @@ def generate_response(messages: list[ChatMessage]):
 if __name__ == "__main__":
     messages = [
         ChatMessage(
+            role=MessageRole.ASSISTANT,
+            content="Hello, how are you? Could you tell me what symptoms you have?",
+        ),
+        ChatMessage(
             role=MessageRole.USER,
-            content="My patient_id is 1, Do I have diabetes?",
-        )
+            content="I am a little bit tired and dizzy and I haven't had any food since a few hours ago.",
+        ),
     ]
+    hydrate_conversation(messages, member_id=1)
     response = generate_response(messages=messages)
     print(response)

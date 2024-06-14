@@ -6,3 +6,4 @@ python-dotenv
 openai
 llama-index
 llama-index-llms-databricks
+pandas
