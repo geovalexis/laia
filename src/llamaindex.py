@@ -56,7 +56,7 @@ def generate_response(messages: list[ChatMessage]):
     )
     current_message = messages[-1]
     chat_history = messages[:-1]
-    response = chat_engine.chat(current_message.content, chat_history=chat_history)
+    response = chat_engine.chat(str(current_message.content), chat_history=chat_history)
     return response
 
 
