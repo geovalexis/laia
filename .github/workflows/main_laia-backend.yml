@@ -8,6 +8,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "**.py"
+      - "data/**"
+      - "prompts/**"
   workflow_dispatch:
 
 env:
