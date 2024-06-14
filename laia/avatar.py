@@ -25,7 +25,7 @@ def generate_video(audio_path):
             response.raise_for_status()
 
             # Save the response blob as a file
-            result_file = Path("result_video.mp4")
+            result_file = Path("/tmp/result_video.mp4")
             with open(result_file, "wb") as video_file:
                 video_file.write(response.content)
             logger.info(f"File uploaded successfully. Video saved as '{result_file}'")

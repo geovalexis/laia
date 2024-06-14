@@ -21,7 +21,7 @@ def generate_audio(
         voice=voice,
         model=model,
     )
-    audio_path = Path(f"audio.mp3")
+    audio_path = Path(f"/tmp/audio.mp3")
     save(audio, str(audio_path))
     return audio_path
 
