@@ -45,24 +45,35 @@ else:
 with open(pathlib.Path(PROMPTS_DIR) / "system.txt") as f:
     system_prompt = f.read()
 
+
 # Create chat engine
-chat_engine = index.as_chat_engine(
-    llm=llm,
-    memory=ChatMemoryBuffer.from_defaults(token_limit=10500),
-    chat_mode=ChatMode.CONTEXT,
-    system_prompt=system_prompt,
-)
-chat_history = [
-    ChatMessage(
-        role=MessageRole.USER,
-        content="I have a leg inflamed, what specialty should I go?",
-    ),
-    ChatMessage(
-        role=MessageRole.ASSISTANT,
-        content="Based on your symptoms, I would recommend that you see a Dermatologist.",
-    ),
-]
-response = chat_engine.chat(
-    "I have a leg inflamed, what specialty should I go?", chat_history=chat_history
-)
-print(response)
+def generate_response(messages: list[ChatMessage]):
+    chat_engine = index.as_chat_engine(
+        llm=llm,
+        memory=ChatMemoryBuffer.from_defaults(token_limit=10500),
+        chat_mode=ChatMode.CONTEXT,
+        system_prompt=system_prompt,
+    )
+    current_message = messages[-1]
+    chat_history = messages[:-1]
+    response = chat_engine.chat(current_message.content, chat_history=chat_history)
+    return response
+
+
+if __name__ == "__main__":
+    messages = [
+        ChatMessage(
+            role=MessageRole.USER,
+            content="I have a leg inflamed, what specialty should I go?",
+        ),
+        ChatMessage(
+            role=MessageRole.ASSISTANT,
+            content="Based on your symptoms, I would recommend that you see a Dermatologist.",
+        ),
+        ChatMessage(
+            role=MessageRole.USER,
+            content="I have a leg inflamed, what specialty should I go?",
+        ),
+    ]
+    response = generate_response(messages=messages)
+    print(response)
