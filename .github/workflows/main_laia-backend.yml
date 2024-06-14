@@ -39,7 +39,7 @@ jobs:
       - name: Zip artifact for deployment
         run: |
           cp requirements.txt src/
-          zip release.zip ./data/* ./index/* ./prompts/* ./src/* -r
+          zip release.zip ./prompts/* ./src/* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
