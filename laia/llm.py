@@ -12,7 +12,7 @@ DATABRICKS_TOKEN = getenv("DATABRICKS_TOKEN")
 
 client = OpenAI(
     api_key=DATABRICKS_TOKEN,
-    base_url="https://adb-2978037251816793.13.azuredatabricks.net/serving-endpoints",
+    base_url="https://adb-652681204530583.3.azuredatabricks.net/serving-endpoints",
 )
 
 chat_completion = client.chat.completions.create(

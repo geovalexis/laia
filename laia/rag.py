@@ -30,7 +30,7 @@ DATABRICKS_TOKEN = getenv("DATABRICKS_TOKEN")
 llm = Databricks(
     model="databricks-meta-llama-3-70b-instruct",
     api_key=DATABRICKS_TOKEN,
-    api_base="https://adb-2978037251816793.13.azuredatabricks.net/serving-endpoints",
+    api_base="https://adb-652681204530583.3.azuredatabricks.net/serving-endpoints",
     max_tokens=256,
 )
 # build or load index
