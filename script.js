@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoElement = document.getElementById('background-video');
     const player = videojs(videoElement);
     let mic_input_text = '';
-    const azureKey = 'fvgyP2xTbhnH-Uq5J36NKbGB9FZGwfK1-tT4FuDn3n5PAzFugBHanw=='; 
+    const azureKey = 'KhhBf_nn3E2w6VYn5z6NspEko87gQkkFwWAgLEftkLYqAzFuaEvR7Q=='; 
     document.getElementById('button-visit-1').innerText = '06/'+(getRandomInt(9)+15)+'/2024 \n'+(getRandomInt(9)+8)+':'+getRandomInt(6)+getRandomInt(10)
     document.getElementById('button-visit-2').innerText = '06/'+(getRandomInt(9)+15)+'/2024 \n'+(getRandomInt(9)+8)+':'+getRandomInt(6)+getRandomInt(10)
     document.getElementById('button-visit-3').innerText = '06/'+(getRandomInt(9)+15)+'/2024 \n'+(getRandomInt(9)+8)+':'+getRandomInt(6)+getRandomInt(10)
